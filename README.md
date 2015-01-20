@@ -28,4 +28,4 @@ love.audio.play(noise)
 -- bonus : plays a binaural beat (you can use denver.stopBinauralBeat() to stop it)
 denver.playBinauralBeat(432, 4, true) -- carrier frequency of 432Hz and a perceived frequency of 4Hz, with pink noise
 ```
-You may be interested in looking in the folder `example-basicsynth`.
+You may be interested in looking in the folder `example-scorereader` and `example-synthesizer`.
