@@ -8,20 +8,20 @@ denver is a simple library to help you play custom waveforms through [LÖVE2D](h
 local denver = require 'denver'
 
 -- play a sinus
-local sine = denver.get('sinus', 440, 1) -- create a sample of 1sec, at the frequency of 440Hz (note that you can also play square, sawtooth and triangle waves)
+local sine = denver.get({waveform='sinus', frequency=440, length=1}) -- create a sample of 1sec, at the frequency of 440Hz (note that you can also play square, sawtooth and triangle waves)
 love.audio.play(sine)
 
 -- play a note
-local square = denver.get('square', 'F#2', 1) -- you can also specify a note : C4, A#2, Fb5
+local square = denver.get({waveform='square', frequency='F#2', length=1}) -- you can also specify a note : C4, A#2, Fb5
 love.audio.play(square)
 
 -- play a looped wave
-local saw = denver.get('sawtooth', 440) -- if you want to loop your sound, don't specify a length
+local saw = denver.get({waveform='sawtooth', frequency=440}) -- if you want to loop your sound, don't specify a length
 saw:setLooping(true)
 love.audio.play(saw)
 
 -- play noise
-local noise = denver.get('whitenoise', 6) -- 6sec of white noise (you can also use pinknoise and brownnoise)
+local noise = denver.get({waveform='whitenoise', length=6}) -- 6sec of white noise (you can also use pinknoise and brownnoise)
 love.audio.play(noise)
 
 
