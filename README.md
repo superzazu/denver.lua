@@ -1,31 +1,33 @@
 # denver
-
-denver is a simple library to help you play custom waveforms through [LÖVE2D](http://love2d.org).
+denver is a simple library to help you play custom waveforms through
+[LÖVE2D](http://love2d.org). It currently supports several waveforms:
+sinus, sawtooth, square, triangle, whitenoise, pinknoise, brownnoise.
 
 ## How it works
-
 ```
 local denver = require 'denver'
 
--- play a sinus
-local sine = denver.get({waveform='sinus', frequency=440, length=1}) -- create a sample of 1sec, at the frequency of 440Hz (note that you can also play square, sawtooth and triangle waves)
+-- play a sinus of 1sec at 440Hz
+local sine = denver.get({waveform='sinus', frequency=440, length=1})
 love.audio.play(sine)
 
--- play a note
-local square = denver.get({waveform='square', frequency='F#2', length=1}) -- you can also specify a note : C4, A#2, Fb5
+-- play a F#2 (available os)
+local square = denver.get({waveform='square', frequency='F#2', length=1})
 love.audio.play(square)
 
--- play a looped wave
-local saw = denver.get({waveform='sawtooth', frequency=440}) -- if you want to loop your sound, don't specify a length
+-- to loop the wave, don't specify a length (generates one period-sample)
+local saw = denver.get({waveform='sawtooth', frequency=440})
 saw:setLooping(true)
 love.audio.play(saw)
 
 -- play noise
-local noise = denver.get({waveform='whitenoise', length=6}) -- 6sec of white noise (you can also use pinknoise and brownnoise)
+local noise = denver.get({waveform='whitenoise', length=6})
 love.audio.play(noise)
 
 
--- bonus : plays a binaural beat (you can use denver.stopBinauralBeat() to stop it)
-denver.playBinauralBeat(432, 4, true) -- carrier frequency of 432Hz and a perceived frequency of 4Hz, with pink noise
+-- bonus : plays a binaural beat
+-- (carrier frequency of 432Hz and a perceived frequency of 4Hz, with noise)
+denver.playBinauralBeat(432, 4, true)
+
+denver.stopBinauralBeat() -- to stop
 ```
-You may be interested in looking in the folder `example-scorereader` and `example-synthesizer`.
