@@ -1,6 +1,6 @@
 # denver
-denver is a simple library to help you play custom waveforms through
-[LÖVE2D](http://love2d.org). It currently supports several waveforms:
+denver is a simple library to help you play custom waveforms with
+[LÖVE](http://love2d.org). It currently supports several waveforms:
 sinus, sawtooth, square, triangle, whitenoise, pinknoise, brownnoise.
 
 ## How it works
@@ -23,11 +23,4 @@ love.audio.play(saw)
 -- play noise
 local noise = denver.get({waveform='whitenoise', length=6})
 love.audio.play(noise)
-
-
--- bonus : plays a binaural beat
--- (carrier frequency of 432Hz and a perceived frequency of 4Hz, with noise)
-denver.playBinauralBeat(432, 4, true)
-
-denver.stopBinauralBeat() -- to stop
 ```

@@ -1,5 +1,5 @@
 local denver = {
-    _VERSION         = 'denver v1.0.1',
+    _VERSION         = 'denver v1.0.2',
     _DESCRIPTION    = 'An audio generation module for LÖVE2D',
     _URL            = 'http://github.com/superzazu/denver.lua',
     _LICENSE        = [[
@@ -22,7 +22,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-    ]]
+]]
 }
 
 denver.rate = 44100
@@ -42,8 +42,8 @@ local oscillators = {}
 denver.get = function (args, ...)
     local waveform = args.waveform or 'sinus'
     local frequency = denver.noteToFrequency(args.frequency)
-					  or args.frequency or 440
-    local length = args.length or 1/frequency
+                      or args.frequency or 440
+    local length = args.length or 1 / frequency
 
     -- creating an empty sample
     local sound_data = love.sound.newSoundData(length * denver.rate,
@@ -59,7 +59,7 @@ denver.get = function (args, ...)
 
     -- filling the sample with values
     local amplitude = 0.2
-    for i=0,length*denver.rate-1 do
+    for i = 0, length * denver.rate - 1 do
         sample = osc(freq, denver.rate) * amplitude
         sound_data:setSample(i, sample)
     end
@@ -79,80 +79,36 @@ denver.noteToFrequency = function (note_str)
     end
     local note_semitones = {C=-9, D=-7, E=-5, F=-4, G=-2, A=0, B=2}
 
-    local semitones = note_semitones[note_str:sub(1,1)]
+    local semitones = note_semitones[note_str:sub(1, 1)]
     local octave = 4
     local alteration = 0
 
     if note_str:len() == 2 then
-        octave = note_str:sub(2,2)
+        octave = note_str:sub(2, 2)
     elseif note_str:len() == 3 then -- # or flat
-        if note_str:sub(2,2) == '#' then
+        if note_str:sub(2, 2) == '#' then
             semitones = semitones + 1
-        elseif note_str:sub(2,2) == 'b' then
+        elseif note_str:sub(2, 2) == 'b' then
             semitones = semitones - 1
         end
-        octave = note_str:sub(3,3)
+        octave = note_str:sub(3, 3)
     end
 
-    semitones = semitones + 12 * (octave-4)
+    semitones = semitones + 12 * (octave - 4)
 
-    return denver.base_freq * math.pow(math.pow(2, 1/12), semitones)
+    return denver.base_freq * math.pow(math.pow(2, 1 / 12), semitones)
     -- frequency = root * (2^(1/12))^steps (steps(=semitones) can be negative)
 end
-
-
-
--- BONUS: plays a basic binaural beat with LÖVE (option: pink noise)
-local left = nil
-local right = nil
-local noise = nil
-denver.playBinauralBeat = function (carrier, frequency, play_noise)
-    -- noise generation
-    if play_noise then
-        noise = denver.get({waveform='pinknoise', length=5})
-        noise:setLooping(true)
-        noise:setVolume(0.8)
-        love.audio.play(noise)
-    end
-
-    -- sinus
-    left = denver.get({waveform='sinus', frequency=carrier+frequency/2})
-    left:setPosition(-1,0,0)
-    left:setLooping(true)
-
-    right = denver.get({waveform='sinus', frequency=carrier-frequency/2})
-    right:setPosition(1,0,0)
-    right:setLooping(true)
-
-    love.audio.play(left)
-    love.audio.play(right)
-end
-
-denver.stopBinauralBeat = function ()
-    if left then
-        love.audio.stop(left)
-    end
-    if right then
-        love.audio.stop(right)
-    end
-    if noise then
-        love.audio.stop(noise)
-    end
-end
-
-
-
-
 
 -- OSCILLATORS
 oscillators.sinus = function (f)
     local phase = 0
     return function()
-        phase = phase + 2*math.pi/denver.rate
-        if phase >= 2*math.pi then
-            phase = phase - 2*math.pi
+        phase = phase + 2 * math.pi / denver.rate
+        if phase >= 2 * math.pi then
+            phase = phase - 2 * math.pi
         end
-        return math.sin(f*phase)
+        return math.sin(f * phase)
     end
 end
 
@@ -199,7 +155,7 @@ oscillators.whitenoise = function ()
 end
 
 oscillators.pinknoise = function () -- http://www.musicdsp.org/files/pink.txt
-    local b0,b1,b2,b3,b4,b5,b6 = 0,0,0,0,0,0,0
+    local b0, b1, b2, b3, b4, b5, b6 = 0, 0, 0, 0, 0, 0, 0
     return function()
         local white = math.random() * 2 - 1
         b0 = 0.99886 * b0 + white * 0.0555179;
